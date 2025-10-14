@@ -16,7 +16,7 @@ export default function FavoritesPage() {
         <p className="text-gray-500">Loading favorites...</p>
       ) : favorites.length === 0 ? (
         <p className="text-xl text-gray-500 mt-10 text-center">
-            You haven't added any favorite movies yet!
+            You haven&apos;t added any favorite movies yet!
         </p>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">

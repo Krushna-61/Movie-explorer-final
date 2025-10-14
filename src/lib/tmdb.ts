@@ -18,7 +18,7 @@ export interface Movie {
 }
 
 // Helper to handle the common OMDb request logic
-const omdbRequest = async (params: any) => {
+const omdbRequest = async (params: Record<string,any>) => {
     if (!OMDb_API_KEY) {
         console.error("OMDB_API_KEY is not set. Cannot fetch.");
         return { Response: "False", Error: "API Key Missing" };
@@ -57,7 +57,7 @@ export const fetchMovies = async (query?: string, page: number = 1): Promise<Mov
 
     // Standard Success Check: Check for "True" response and existence of the Search array
     if (data.Response === "True" && data.Search) {
-        return data.Search.map((m: any) => ({
+        return data.Search.map((m: Record<string,any>) => ({
             // *** OMDb to Movie Mapping ***
             id: m.imdbID, 
             title: m.Title,
