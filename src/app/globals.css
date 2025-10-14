@@ -1,3 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* FINAL FIX: Ensure the dark background applies to the root in dark mode */
+html.dark {
+  /* This is a simple Tailwind color but explicitly set */
+  background-color: #1f3726 !important; /* Tailwind's gray-800 or similar */
+}
+/* Ensure the body takes up full height */
+body {
+    min-height: 100vh;
+}
+
+/* Rest of the file content... */
 @import "tailwindcss";
 
 :root {
