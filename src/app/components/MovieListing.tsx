@@ -139,7 +139,7 @@ export default function MovieListing() {
 
       {movies.length === 0 && !isLoading ? (
         <p className="text-xl text-center text-gray-500 dark:text-gray-400 mt-10">
-          `No movies found for "{searchQuery}". Try a different search!``
+          {`No movies found for "{searchQuery}". Try a different search!`}
         </p>
       ) : (
         <>
