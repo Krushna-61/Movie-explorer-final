@@ -26,14 +26,12 @@ const MovieCard: React.FC<{ movie: Movie }> = ({ movie }) => (
             className="object-cover"
             priority={false}
             onError={(e) => {
-              // On error (like 404), switch to the public placeholder URL
               e.currentTarget.srcset = ''; 
               e.currentTarget.src = FALLBACK_IMAGE_URL; 
               e.currentTarget.onerror = null; 
             }}
           />
         ) : (
-          // Placeholder div if poster_path is null initially
           <div className="flex items-center justify-center w-full h-full bg-gray-300 dark:bg-zinc-700">
             <p className="text-gray-600 dark:text-gray-400 text-sm p-4 text-center">No Poster</p>
           </div>
@@ -52,7 +50,7 @@ const MovieCard: React.FC<{ movie: Movie }> = ({ movie }) => (
   </Link>
 );
 
-// --- Dependency 2: Loading Skeletons ---
+// --- Dependency 2: Loading Skeletons (remains the same) ---
 const renderSkeletons = (count: number = 12) => (
   [...Array(count)].map((_, i) => (
     <div key={i} className="bg-gray-200 dark:bg-zinc-800 rounded-lg shadow-lg h-96 w-full animate-pulse">
@@ -76,9 +74,7 @@ export default function MovieListing() {
   const [hasMore, setHasMore] = useState(true);
 
   // FIX 1: Make loadMovies stable by giving it an empty dependency array
-  // and using functional setStates to prevent unnecessary re-renders.
   const loadMovies = useCallback(async (query: string, pageNum: number, append: boolean = false) => {
-    // Only show loading indicator if we are replacing the list or fetching a new page
     if (movies.length === 0 || !append) setIsLoading(true);
     
     const data = await fetchMovies(query || undefined, pageNum);
@@ -87,7 +83,6 @@ export default function MovieListing() {
         setHasMore(false);
     }
     
-    // Use functional update to append new data without depending on 'movies' in useCallback
     setMovies(prevMovies => append && pageNum > 1 ? [...prevMovies, ...data] : data);
     setIsLoading(false);
   }, []); // <-- EMPTY DEPENDENCY ARRAY ensures stability
@@ -95,22 +90,19 @@ export default function MovieListing() {
 
   // FIX 2: Correct initial load/search effect
   useEffect(() => {
-    // This effect runs on mount and when searchQuery changes (due to the debounce logic)
     const handler = setTimeout(() => {
-        setPage(1); // Always reset to page 1 on a new search
+        setPage(1); 
         setHasMore(true); 
-        // Pass the latest searchQuery and page 1. Do not append.
         loadMovies(searchQuery, 1, false); 
     }, 500); 
 
     return () => clearTimeout(handler);
-  }, [searchQuery, loadMovies]); // Trigger only when searchQuery or loadMovies changes
+  }, [searchQuery, loadMovies]); 
 
   // Handler for the "Load More" button
   const handleLoadMore = () => {
       const nextPage = page + 1;
       setPage(nextPage);
-      // Load the next page and explicitly append
       loadMovies(searchQuery, nextPage, true);
   };
   
@@ -139,7 +131,8 @@ export default function MovieListing() {
 
       {movies.length === 0 && !isLoading ? (
         <p className="text-xl text-center text-gray-500 dark:text-gray-400 mt-10">
-          {`No movies found for "{searchQuery}". Try a different search!`}
+          {/* FIX: Use backticks (template literals) for cleaner string interpolation and escaping */}
+          {`No movies found for "${searchQuery}". Try a different search!`} 
         </p>
       ) : (
         <>
@@ -172,6 +165,7 @@ export default function MovieListing() {
             {/* Show message when all data has been loaded */}
             {!hasMore && searchQuery.length === 0 && (
                 <p className="text-center text-gray-500 dark:text-gray-400 mt-10">
+                    {/* FIX: Use HTML entity for the apostrophe */}
                     You&apos;ve reached the end of the popular movie list!
                 </p>
             )}
@@ -180,4 +174,3 @@ export default function MovieListing() {
     </div>
   );
 }
-
