@@ -19,6 +19,7 @@ export interface Movie {
 
 // Helper to handle the common OMDb request logic
 // FIX 1: Ensure the type is correctly specified without space issues
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const omdbRequest = async (params: Record<string, any>) => { 
     if (!OMDb_API_KEY) {
         console.error("OMDB_API_KEY is not set. Cannot fetch.");
@@ -59,7 +60,8 @@ export const fetchMovies = async (query?: string, page: number = 1): Promise<Mov
     // Standard Success Check: Check for "True" response and existence of the Search array
     if (data.Response === "True" && data.Search) {
         // FIX 2: Ensure the type is correctly specified without space issues
-        return data.Search.map((m: Record<string, any>) => ({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return data.Search.map((m: Record<string,any>) => ({
             // *** OMDb to Movie Mapping ***
             id: m.imdbID, 
             title: m.Title,
